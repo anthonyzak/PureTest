@@ -1,4 +1,5 @@
-from chat.providers import BaseProvider, SlingAcademyProvider
+from chat.providers.base import BaseProvider
+from chat.providers.sling_academy import SlingAcademyProvider
 
 
 class ProviderFactory:

@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 
 from chat.models.image import ExternalImage
-from chat.providers import BaseProvider
+from chat.providers.base import BaseProvider
 from core.settings import API_SLING_ACADEMY_URL
 from utils.request import make_request
 
