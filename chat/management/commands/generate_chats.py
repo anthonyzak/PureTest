@@ -1,5 +1,6 @@
 import random
 import uuid
+from typing import Any, List
 
 from django.contrib.auth.hashers import make_password
 from django.core.management.base import BaseCommand
@@ -9,10 +10,22 @@ from chat.models import Chat
 
 
 class Command(BaseCommand):
-    help = "Generates thousands of chats in the database distributed"
-    "among multiple users"
+    """
+    Django management command to generate thousands of
+    chats distributed among multiple users.
+    """
 
-    def add_arguments(self, parser):
+    help = (
+        "Generates thousands of chats in the database distributed "
+        "among multiple users"
+    )
+
+    def add_arguments(self, parser) -> None:
+        """
+        Add command line arguments to the parser.
+
+        :param parser: The argument parser.
+        """
         parser.add_argument(
             "num_chats", type=int, help="Number of chats to create"
         )
@@ -23,7 +36,13 @@ class Command(BaseCommand):
             help="Number of users to create (default: 5)",
         )
 
-    def handle(self, *args, **kwargs):
+    def handle(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Handle the execution of the command.
+
+        :param args: Additional positional arguments.
+        :param kwargs: Additional keyword arguments.
+        """
         num_chats = kwargs["num_chats"]
         num_users = kwargs["num_users"]
 
@@ -39,7 +58,13 @@ class Command(BaseCommand):
             )
         )
 
-    def create_users(self, num_users):
+    def create_users(self, num_users: int) -> List[CustomUser]:
+        """
+        Create a specified number of users.
+
+        :param num_users: Number of users to create.
+        :return: List of created CustomUser instances.
+        """
         users_to_create = []
         for i in range(num_users):
             username = f"testuser_{i}_{uuid.uuid4().hex[:8]}"
@@ -51,7 +76,13 @@ class Command(BaseCommand):
         users = CustomUser.objects.bulk_create(users_to_create, batch_size=500)
         return users
 
-    def create_chats(self, num_chats, users):
+    def create_chats(self, num_chats: int, users: List[CustomUser]) -> None:
+        """
+        Create a specified number of chats assigned to random users.
+
+        :param num_chats: Number of chats to create.
+        :param users: List of users among whom the chats will be distributed.
+        """
         chats_to_create = []
         for _ in range(num_chats):
             user = random.choice(users)  # nosec B311
