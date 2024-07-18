@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                     "username",
                     models.CharField(
                         error_messages={
-                            "unique": "A user with that username"
+                            "unique": "A user with that username "
                             "already exists."
                         },
                         help_text="Required. 150 characters or fewer. "
@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                     "is_staff",
                     models.BooleanField(
                         default=False,
-                        help_text="Designates whether the user can log"
+                        help_text="Designates whether the user can log "
                         "into this admin site.",
                         verbose_name="staff status",
                     ),
@@ -115,8 +115,8 @@ class Migration(migrations.Migration):
                     "groups",
                     models.ManyToManyField(
                         blank=True,
-                        help_text="The groups this user belongs to."
-                        "A user will get all permissions granted to"
+                        help_text="The groups this user belongs to. "
+                        "A user will get all permissions granted to "
                         "each of their groups.",
                         related_name="user_set",
                         related_query_name="user",
