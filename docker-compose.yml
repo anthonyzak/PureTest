@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+    app:
+        build: .
+        volumes:
+            - .:/app
+            - ./media:/app/media
+        ports:
+            - "8000:8000"
+        env_file:
+            - ./.env
+        depends_on:
+            - db
+            - redis
+    celery:
+        build: .
+        command: celery -A core worker -l INFO
+        volumes:
+            - .:/app
+        env_file:
+            - ./.env
+        depends_on:
+            - app
+            - redis
+            - db
+        restart: on-failure
+
+    celery-beat:
+        build: .
+        command: celery -A core beat --loglevel=info
+        depends_on:
+            - celery
+
+    db:
+        image: postgres:13-bullseye
+        environment:
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASS}
+            - POSTGRES_DB=${DB_NAME}
+        volumes:
+            - pg_data:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+
+    redis:
+        image: redis:latest
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+
+    flower:
+        build: .
+        command: celery -A core flower --port=3535
+        volumes:
+            - .:/app
+        env_file:
+            - ./.env
+        ports:
+            - "3535:3535"
+        depends_on:
+            - celery
+
+volumes:
+    pg_data:
+    redis_data:
+    media:

@@ -1,0 +1,36 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div id="content" class="flex">
+    <form method="post" action="{% url 'admin:process_send_banner_form' %}">
+        {% csrf_token %}
+        <fieldset class="module aligned">
+            <div class="form-row">
+                <div>
+                    {{ form.content.label_tag }}<br>
+                    {{ form.content }}
+                </div>
+            </div>
+        </fieldset>
+        <div class="submit-row">
+            <input type="submit" class="button" value="Send Banners">
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* Estilo para el formulario */
+    #content {
+        padding: 20px;
+    }
+    /* Estilo para el campo de contenido */
+    textarea {
+        width: 100%;
+        min-height: 150px;
+    }
+</style>
+{% endblock %}
