@@ -39,7 +39,7 @@ def sling_provider():
 
 
 @pytest.mark.django_db
-@patch("chat.providers.sling_academy.make_request")
+@patch("chat.providers.sling_academy.make_get_request")
 def test_fetch_data(mock_request, sling_provider):
     mock_request.return_value = MOCK_SLING_ACADEMY_API_RESPONSE
     result = sling_provider.fetch_data()

@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 from chat.models.image import ExternalImage
 from chat.providers.base import BaseProvider
 from core.settings import API_SLING_ACADEMY_URL
-from utils.request import make_request
+from utils.request import make_get_request
 
 
 class SlingAcademyProvider(BaseProvider):
@@ -18,7 +18,7 @@ class SlingAcademyProvider(BaseProvider):
         :return: Dictionary containing the fetched data from the API.
         """
         offset = ExternalImage.objects.count()
-        return make_request(
+        return make_get_request(
             API_SLING_ACADEMY_URL, params={"offset": offset, "limit": 10}
         )
 

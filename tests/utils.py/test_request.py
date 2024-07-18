@@ -9,7 +9,7 @@ from utils.exceptions import (
     InternalError,
     UnexpectedResponseError,
 )
-from utils.request import make_request
+from utils.request import make_get_request
 
 
 @pytest.fixture
@@ -18,12 +18,12 @@ def mock_requests():
         yield mock
 
 
-def test_make_request_success(mock_requests):
+def test_make_get_request_success(mock_requests):
     mock_response = MagicMock()
     mock_response.json.return_value = {"data": "test"}
     mock_requests.return_value = mock_response
 
-    result = make_request("http://test.com", {"param": "value"})
+    result = make_get_request("http://test.com", {"param": "value"})
 
     mock_requests.assert_called_once_with(
         "http://test.com", params={"param": "value"}
@@ -31,34 +31,34 @@ def test_make_request_success(mock_requests):
     assert result == {"data": "test"}
 
 
-def test_make_request_external_api_unavailable(mock_requests):
+def test_make_get_request_external_api_unavailable(mock_requests):
     mock_requests.side_effect = RequestException()
 
     with pytest.raises(ExternalAPIUnavailableError):
-        make_request("http://test.com")
+        make_get_request("http://test.com")
 
 
-def test_make_request_unexpected_response(mock_requests):
+def test_make_get_request_unexpected_response(mock_requests):
     mock_response = MagicMock()
     mock_response.raise_for_status.side_effect = requests.HTTPError()
     mock_requests.return_value = mock_response
 
     with pytest.raises(UnexpectedResponseError):
-        make_request("http://test.com")
+        make_get_request("http://test.com")
 
 
-def test_make_request_api_unavailable(mock_requests):
+def test_make_get_request_api_unavailable(mock_requests):
     mock_requests.side_effect = requests.ConnectionError()
 
     with pytest.raises(ExternalAPIUnavailableError):
-        make_request("http://test.com")
+        make_get_request("http://test.com")
 
 
-def test_make_request_internal_error(mock_requests):
+def test_make_get_request_internal_error(mock_requests):
     mock_requests.side_effect = Exception()
 
     with pytest.raises(InternalError):
-        make_request("http://test.com")
+        make_get_request("http://test.com")
 
 
 @pytest.mark.parametrize(
@@ -69,12 +69,12 @@ def test_make_request_internal_error(mock_requests):
         ("https://api.example.com", {"id": 123, "type": "user"}),
     ],
 )
-def test_make_request_different_params(mock_requests, url, params):
+def test_make_get_request_different_params(mock_requests, url, params):
     mock_response = MagicMock()
     mock_response.json.return_value = {"data": "test"}
     mock_requests.return_value = mock_response
 
-    result = make_request(url, params)
+    result = make_get_request(url, params)
 
     mock_requests.assert_called_once_with(url, params=params)
     assert result == {"data": "test"}

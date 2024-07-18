@@ -13,7 +13,9 @@ from utils.exceptions import (
 logger = get_task_logger(__name__)
 
 
-def make_request(url: str, params: Dict[str, Any] = None) -> Dict[str, Any]:
+def make_get_request(
+    url: str, params: Dict[str, Any] = None
+) -> Dict[str, Any]:
     """
     Makes a GET request to the specified URL with the given parameters.
 
