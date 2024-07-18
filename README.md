@@ -68,6 +68,3 @@ To stop all containers and shut down the development environment, run:
 ```sh
 make shutdown
 ```
-
-### Author
-Author: Anthony Zakhaur
